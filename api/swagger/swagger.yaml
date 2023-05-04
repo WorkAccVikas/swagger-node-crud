@@ -1,0 +1,657 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths
+basePath: /
+#
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+  
+paths:
+  /hello:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: hello
+      parameters:
+        - name: name
+          in: query
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /ping:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: hello_world
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: ping
+      parameters:
+        - name: city
+          in: header
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/v1/users/{iid}:
+    x-swagger-router-controller: user
+    get:
+      description: Returns all users
+      # used as the method name of the controller
+      operationId: user
+      parameters:
+        # MANDATORY HEADERS
+        - name: iid
+          in: path
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    put:
+      description: update users
+      # used as the method name of the controller
+      operationId: updateUser
+      parameters:
+        # MANDATORY HEADERS
+        - name: iid
+          in: path
+          type: string
+          required: true
+
+        # BODY PARAMS
+        - name: userBody1
+          in: body
+          schema:
+            $ref: "#/definitions/UserBody1"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    delete:
+      description: Delete user
+      # used as the method name of the controller
+      operationId: deleteUser
+      parameters:
+        # MANDATORY HEADERS
+        - name: iid
+          in: path
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    
+  /api/v1/users/updateManyUsers:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: user
+    put:
+      description: update users
+      # used as the method name of the controller
+      operationId: updateMultipleUsers
+      parameters:
+        # MANDATORY HEADERS
+        - name: age
+          in: query
+          type: string
+          required: false
+        - name: salary
+          in: query
+          type: number
+          required: false
+
+        # BODY PARAMS
+        - name: userBody1
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/UserBody2"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/v1/users:
+    x-swagger-router-controller: user
+    post:
+      description: add users
+      # used as the method name of the controller
+      operationId: addUser
+      parameters:
+        # BODY PARAMS
+        - name: userBody
+          in: body
+          schema:
+            $ref: "#/definitions/UserBody"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /api/v1/users/find:
+    x-swagger-router-controller: user
+    get:
+      description: Returns 'Hello' to the caller
+      # used as the method name of the controller
+      operationId: userFind
+      parameters:
+        - name: city
+          in: header
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      
+  /api/v1/emps:
+    x-swagger-router-controller: emp
+    get:
+      description: Returns all emps
+      # used as the method name of the controller
+      operationId: emp
+      parameters:
+        # MANDATORY HEADERS
+        - name: queryParameters
+          in: query
+          type: string
+          required: false
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/v1/students/populate:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: student
+    get:
+      description: Returns all student records with populate
+      # used as the method name of the controller
+      operationId: student
+      parameters:
+        - name: name
+          in: query
+          description: The name of the person to whom to say hello
+          required: false
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /api/populate/emp1/findall:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: emp1
+    get:
+      description: Returns all employe
+      # used as the method name of the controller
+      operationId: findAllEmployee
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /api/populate/emp1/saveone:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: emp1
+    post:
+      description: Returns all employe
+      # used as the method name of the controller
+      operationId: saveOneEmployee
+      parameters:
+        # BODY PARAMS
+        - name: EmpBody
+          in: body
+          schema:
+            $ref: "#/definitions/EmpBody"
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+     
+  /api/populate/book1/findall:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: book1
+    get:
+      description: Returns all book
+      # used as the method name of the controller
+      operationId: findAllBooks
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /api/populate/book1/saveone:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: book1
+    post:
+      description: add one book
+      # used as the method name of the controller
+      operationId: saveOneBook
+      parameters:
+        # BODY PARAMS
+        - name: BookBody
+          in: body
+          schema:
+            $ref: "#/definitions/BookBody"
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+                        
+  /api/populate/course1/findall:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: course1
+    get:
+      description: Returns all book
+      # used as the method name of the controller
+      operationId: findAllCourses
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /api/populate/course1/saveone:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: course1
+    post:
+      description: add one course
+      # used as the method name of the controller
+      operationId: saveOneCourse
+      parameters:
+        # BODY PARAMS
+        - name: CourseBody
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CourseBody"
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+                           
+  /api/populate/course1/updateone/{course_id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: course1
+    put:
+      description: update one course
+      # used as the method name of the controller
+      operationId: updateOneCourse
+      parameters:
+        # MANDATORY HEADERS
+        - name: course_id
+          in: path
+          type: string
+          required: true
+        # BODY PARAMS
+        - name: CourseBody
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CourseBody1"
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+                           
+  /api/populate/customer1/findall:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: customer1
+    get:
+      description: Returns all customers
+      # used as the method name of the controller
+      operationId: findAllCustomers
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /api/populate/customer1/saveone:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: customer1
+    post:
+      description: add one customer
+      # used as the method name of the controller
+      operationId: saveOneCustomer
+      parameters:
+        # BODY PARAMS
+        - name: CustomerBody
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CustomerBody"
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /api/populate/customer1/updateone/{customer_id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: customer1
+    put:
+      description: update one customer
+      # used as the method name of the controller
+      operationId: updateOneCustomer
+      parameters:
+        # MANDATORY HEADERS
+        - name: customer_id
+          in: path
+          type: string
+          required: true
+        # BODY PARAMS
+        - name: CustomerBody
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CustomerBody1"
+        
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/HelloWorldResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+                             
+  
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+
+  UserBody:
+    type: object
+    properties:
+      iid: 
+        type: number
+      name:
+        type: string
+      age:
+        type: number
+      city:
+        type: string
+      contact: 
+        type: number
+    required:
+      - iid
+      - name
+      - age
+      - city
+      - contact
+      
+  UserBody1:
+    type: object
+    properties:
+      name:
+        type: string
+      age:
+        type: number
+      city:
+        type: string
+      contact: 
+        type: number
+        
+  UserBody2:
+    type: object
+    properties:
+      name:
+        type: string
+      age:
+        type: number
+      city:
+        type: string
+      contact: 
+        type: number
+      company:
+        type: string
+      bonus:
+        type: number
+        
+  EmpBody:
+    type: object
+    properties:
+      eid:
+        type: number
+      ename:
+        type: string
+      salary:
+        type: number
+        
+  BookBody:
+    type: object
+    properties:
+      bid:
+        type: number
+      bname:
+        type: string
+      price:
+        type: number
+      type:
+        type: string
+        
+  CourseBody:
+    type: object
+    properties:
+      course_id:
+        type: number
+      course_name:
+        type: string
+      fee:
+        type: number
+
+  CourseBody1:
+    type: object
+    properties:
+      book_id:
+        type: string
+     
+  CustomerBody:
+    type: object
+    properties:
+      cid:
+        type: number
+      cname:
+        type: string
+      age:
+        type: number
+        
+  CustomerBody1:
+    type: object
+    properties:
+      course_id:
+        type: string
+      emp_id:
+        type: array
+        items: {
+          type: string
+        }
+      
+           
+  
