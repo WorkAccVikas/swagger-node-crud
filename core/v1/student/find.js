@@ -12,6 +12,7 @@ class Find {
       studentModel
         .find({})
         .lean()
+        // .populate("issuedCourses", "-_id cid cname")
         // .populate("issuedCourses")
         .populate(populateObj)
         .then((result) => {

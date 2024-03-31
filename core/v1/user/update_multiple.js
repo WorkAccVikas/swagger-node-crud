@@ -56,16 +56,8 @@ class UpdateMultiple {
           criteria,
           // { $set: { company: company }, $mul: { bonus: bonus } }
 
-          [
-            {
-              $set: {
-                salary: {
-                  $round: [{ $mul: ["$salary", 1.2] }, 2], // Increase the salary by 20% and round off to 2 decimal places
-                },
-                company: company, // Assign the employee to the Sales department
-              },
-            },
-          ]
+          // Set the company field and salary and bonus increased
+          { $set: { company: company }, $mul: { salary: 0.6, bonus: bonus } }
         )
 
         .then((result) => {

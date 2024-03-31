@@ -29,7 +29,7 @@ function user(req, res) {
         // statusCode: responseReceived ? 200 : 404,
         message: responseReceived ? "Yes" : "No",
         data: response,
-        total: response.length,
+        total: typeof response === "object" ? response.length : 0,
       });
     })
     .catch((err) => {

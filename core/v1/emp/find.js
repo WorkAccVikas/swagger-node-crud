@@ -57,7 +57,7 @@ class Find {
         // * : pagination
         if (page) {
           // console.log("In page = ", page, limit);
-          let pageNo = Number(page) || 1;
+          let pageNo = Number(page);
           // let limit_number = limit || (Number(limit) || 8);
           let limit_number =
             typeof limit === "undefined"
@@ -66,9 +66,16 @@ class Find {
               ? Number(limit)
               : undefined;
 
+          if (Number.isNaN(pageNo)) reject("Please Enter proper page number");
+
+          if (Number.isNaN(limit_number))
+            reject("Please Enter proper limit number");
+
           // console.log(limit_number, typeof limit_number);
           let skip = (pageNo - 1) * limit_number;
           apiData = apiData.skip(skip).limit(limit_number);
+        } else if (page === undefined && limit !== undefined) {
+          reject("Please Enter Page Number");
         }
 
         let data = await apiData;
